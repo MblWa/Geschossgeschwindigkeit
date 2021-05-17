@@ -1,0 +1,42 @@
+.sidebar {
+  margin: 0;
+  padding: 10px;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+}
+
+.sidebar__feature {
+  margin: 0;
+  color: gray;
+  font-weight: 900;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.sidebar__featureHighLight {
+  color: black;
+  font-size: 28px;
+  margin: 0;
+}
+
+.sidebar__acceptButton {
+  border: none;
+  color: gray;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 28px;
+  text-transform: uppercase;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.sidebar__acceptButton:hover,
+.sidebar__acceptButton:focus {
+  color: black;
+}
+
+.sidebar__acceptButton:active {
+  color: red;
+}
