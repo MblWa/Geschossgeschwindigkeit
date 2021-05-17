@@ -1,9 +1,12 @@
 import * as React from 'react';
-import './styles/index.css';
+import Header from './Header';
+import Board from './Board';
 import './styles/normalize.css';
 
 const App = () => (
   <>
+    <Header />
+    <Board />
   </>
 );
 
