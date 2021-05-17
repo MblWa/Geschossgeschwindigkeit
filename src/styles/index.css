@@ -1,0 +1,22 @@
+@font-face {
+  font-family: "Cuprum";
+  src: url("../fonts/cuprum-bold.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cuprum";
+  src: url("../fonts/cuprum.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  background: linear-gradient(90deg, rgba(48, 48, 64, 1) 0%, rgba(188, 188, 205, 1) 100%) fixed;
+  font-family: "Cuprum", "Arial", sans-serif;
+  font-weight: 400;
+  color: white;
+}
