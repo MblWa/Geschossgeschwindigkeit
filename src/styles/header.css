@@ -9,6 +9,7 @@
 .header__logo {
   fill: url(#logo__gradient);
 }
+
 .header__link:hover .header__logo,
 .header__link:focus .header__logo {
   fill: url(#logo__gradient--hover);

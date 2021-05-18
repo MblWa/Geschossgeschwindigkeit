@@ -15,3 +15,10 @@
   clip: rect(0 0 0 0);
   overflow: hidden;
 }
+
+.error {
+  padding: 10px 3px;
+  font-size: 30px;
+  text-align: center;
+  background-color: red;
+}
