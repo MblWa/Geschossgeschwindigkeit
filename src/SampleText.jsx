@@ -36,7 +36,7 @@ const SampleText = ({
       <p className={styles.sampletext}>
         {[...sampleText].slice(0, lastChar).map((char, i) => (
           <Char
-            key={i}
+            key={i.toString() + char}
             isStarted={isStarted}
             char={char}
             state={errorIndexes.includes(i) ? 'error' : 'success'}
@@ -44,7 +44,7 @@ const SampleText = ({
         ))}
         {[...sampleText].slice(lastChar, sampleText.length).map((char, i) => (
           <Char
-            key={i}
+            key={i.toString() + char}
             isStarted={isStarted}
             char={char}
             state="default"
