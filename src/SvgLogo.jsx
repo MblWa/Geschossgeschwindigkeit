@@ -1,9 +1,9 @@
 import * as React from 'react';
-import styles from './styles/header.css';
+import * as PropTypes from 'prop-types';
 
-const SvgLogo = () => (
+const SvgLogo = ({ className }) => (
   <svg
-    className={styles.header__logo}
+    className={className}
     xmlns="http://www.w3.org/2000/svg"
     width="942"
     height="102"
@@ -31,5 +31,13 @@ const SvgLogo = () => (
     />
   </svg>
 );
+
+SvgLogo.propTypes = {
+  className: PropTypes.string,
+};
+
+SvgLogo.defaultProps = {
+  className: '',
+};
 
 export default SvgLogo;
