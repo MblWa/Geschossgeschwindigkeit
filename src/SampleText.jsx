@@ -1,9 +1,17 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import Char from './Char';
 import styles from './styles/sampletext.css';
 import utilStyles from './styles/util.css';
 
-const SampleText = ({ isLoaded, sampleText, error, isStarted, errorIndexes, lastChar }) => {
+const SampleText = ({
+  isLoaded,
+  sampleText,
+  error,
+  isStarted,
+  errorIndexes,
+  lastChar,
+}) => {
   if (error) {
     return (
       <p className={utilStyles.error}>
@@ -28,7 +36,7 @@ const SampleText = ({ isLoaded, sampleText, error, isStarted, errorIndexes, last
       <p className={styles.sampletext}>
         {[...sampleText].slice(0, lastChar).map((char, i) => (
           <Char
-            key={i}
+            key={i.toString() + char}
             isStarted={isStarted}
             char={char}
             state={errorIndexes.includes(i) ? 'error' : 'success'}
@@ -36,7 +44,7 @@ const SampleText = ({ isLoaded, sampleText, error, isStarted, errorIndexes, last
         ))}
         {[...sampleText].slice(lastChar, sampleText.length).map((char, i) => (
           <Char
-            key={i}
+            key={i.toString() + char}
             isStarted={isStarted}
             char={char}
             state="default"
@@ -45,6 +53,21 @@ const SampleText = ({ isLoaded, sampleText, error, isStarted, errorIndexes, last
       </p>
     </>
   );
+};
+
+SampleText.propTypes = {
+  isLoaded: PropTypes.bool.isRequired,
+  sampleText: PropTypes.string.isRequired,
+  error: PropTypes.objectOf(PropTypes.any),
+  isStarted: PropTypes.bool.isRequired,
+  errorIndexes: PropTypes.arrayOf(PropTypes.number),
+  lastChar: PropTypes.number,
+};
+
+SampleText.defaultProps = {
+  errorIndexes: [],
+  error: null,
+  lastChar: 0,
 };
 
 export default SampleText;

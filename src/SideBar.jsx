@@ -1,9 +1,16 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import ResultCard from './ResultCard';
 import styles from './styles/sidebar.css';
 import utilStyles from './styles/util.css';
 
-const SideBar = ({ speed, accuracy, time, triggerStartAgain, errorCount }) => (
+const SideBar = ({
+  speed,
+  accuracy,
+  time,
+  triggerStartAgain,
+  errorCount,
+}) => (
   <div className={styles.sidebar}>
     <h2 className={utilStyles.visuallyHidden}>Typing Features</h2>
     <ResultCard
@@ -35,5 +42,13 @@ const SideBar = ({ speed, accuracy, time, triggerStartAgain, errorCount }) => (
     </button>
   </div>
 );
+
+SideBar.propTypes = {
+  speed: PropTypes.number.isRequired,
+  accuracy: PropTypes.number.isRequired,
+  time: PropTypes.number.isRequired,
+  triggerStartAgain: PropTypes.func.isRequired,
+  errorCount: PropTypes.number.isRequired,
+};
 
 export default SideBar;

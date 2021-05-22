@@ -6,20 +6,6 @@
   align-items: center;
 }
 
-.sidebar__feature {
-  margin: 0;
-  color: gray;
-  font-weight: 900;
-  font-size: 16px;
-  text-transform: uppercase;
-}
-
-.sidebar__featureHighLight {
-  color: black;
-  font-size: 28px;
-  margin: 0;
-}
-
 .sidebar__acceptButton {
   border: none;
   color: gray;
