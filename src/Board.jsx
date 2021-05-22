@@ -53,8 +53,8 @@ class Board extends React.Component {
       userText: input,
       errorCount,
       errorIndexes,
-      accuracy: (((inputLength - errorCount) / inputLength) * 100).toFixed(0),
-      speed: (((inputLength - errorCount) / (TIME - time + 1)) * 60).toFixed(0),
+      accuracy: Math.trunc(((inputLength - errorCount) / inputLength) * 100),
+      speed: Math.trunc(((inputLength - errorCount) / (TIME - time + 1)) * 60),
       isFinished: inputLength >= sampleText.length,
     });
 
@@ -72,7 +72,7 @@ class Board extends React.Component {
       if (time > 0 && !isFinished) {
         this.setState((state) => ({
           time: state.time - 1,
-          speed: (((state.userText.length - state.errorCount) / (TIME - time + 1)) * 60).toFixed(0),
+          speed: Math.trunc(((state.userText.length - state.errorCount) / (TIME - time + 1)) * 60),
         }));
       } else {
         clearInterval(timer);
