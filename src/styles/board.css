@@ -6,3 +6,11 @@
   display: grid;
   grid-template-columns: 3fr 1fr;
 }
+
+.board__gameover {
+  color: red;
+  font-weight: 900;
+  font-size: 30px;
+  text-align: center;
+  padding: 150px 0;
+}

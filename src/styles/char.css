@@ -1,0 +1,14 @@
+.error {
+  background-color: DarkRed;
+  color: white;
+}
+
+.success {
+  background-color: LawnGreen;
+  color: gray;
+}
+
+.default {
+  background-color: none;
+  color: dimgray;
+}

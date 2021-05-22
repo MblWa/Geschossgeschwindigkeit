@@ -11,6 +11,7 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
   },
   plugins: [new HtmlWebpackPlugin({
+    favicon: 'src/img/favicon.ico',
     filename: 'index.html',
     template: 'src/index.html',
   })],
@@ -48,7 +49,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png)(\?v=\d+\.\d+\.\d+)?$/,
+        test: /\.(png|ico)(\?v=\d+\.\d+\.\d+)?$/,
         use: [
           {
             loader: 'file-loader',
