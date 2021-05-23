@@ -16,8 +16,6 @@ const DEFAULT_STATE = {
   time: TIME,
   timerID: null,
   speed: 0,
-  accuracy: 100,
-  errorCount: 0,
   errorIndexes: [],
   isFinished: false,
 };
@@ -47,13 +45,12 @@ class Board extends React.Component {
   handleUserInput(input) {
     const { isStarted, sampleText, time } = this.state;
     const inputLength = input.length;
-    const { errorCount, errorIndexes } = findErrors(sampleText, input);
+    const errorIndexes = findErrors(sampleText, input);
+    const errorCount = errorIndexes.length;
 
     this.setState({
       userText: input,
-      errorCount,
       errorIndexes,
-      accuracy: Math.trunc(((inputLength - errorCount) / inputLength) * 100),
       speed: Math.trunc(((inputLength - errorCount) / (TIME - time + 1)) * 60),
       isFinished: inputLength >= sampleText.length,
     });
@@ -70,7 +67,8 @@ class Board extends React.Component {
       if (time > 0 && !isFinished) {
         this.setState((state) => ({
           time: state.time - 1,
-          speed: Math.trunc(((state.userText.length - state.errorCount) / (TIME - time + 1)) * 60),
+          speed: Math.trunc(((
+            state.userText.length - state.errorIndexes.length) / (TIME - time + 1)) * 60),
         }));
       } else {
         clearInterval(timer);
@@ -100,8 +98,6 @@ class Board extends React.Component {
             sampleText: result[0].replace(/ {2,}/g, ' '), // Ответ от сервера приходит с двойными пробелами, убираем их.
           });
         },
-        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
-        // чтобы не перехватывать исключения из ошибок в самих компонентах.
         (error) => {
           this.setState({
             isLoaded: true,
@@ -118,13 +114,18 @@ class Board extends React.Component {
       error,
       userText,
       speed,
-      accuracy,
       time,
       isFinished,
-      errorCount,
       isStarted,
       errorIndexes,
     } = this.state;
+    const errorCount = errorIndexes.length;
+    const inputLength = userText.length;
+    let accuracy = Math.trunc(((inputLength - errorCount) / inputLength) * 100);
+
+    if (Number.isNaN(accuracy)) {
+      accuracy = 100;
+    }
 
     return (
       <main className={styles.board}>
