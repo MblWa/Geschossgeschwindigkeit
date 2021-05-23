@@ -1,6 +1,6 @@
 const findErrors = (sample, input) => {
   let errorCount = 0;
-  let errorIndexes = [];
+  const errorIndexes = [];
 
   [...input].forEach((char, i) => {
     if (sample[i] !== char) {
@@ -9,7 +9,7 @@ const findErrors = (sample, input) => {
     }
   });
 
-  return {errorCount, errorIndexes}
+  return { errorCount, errorIndexes };
 };
 
-export { findErrors };
+export { findErrors as default };
