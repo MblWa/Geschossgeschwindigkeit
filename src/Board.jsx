@@ -33,14 +33,14 @@ class Board extends React.Component {
   }
 
   componentDidMount() {
-    this.fechData();
+    this.fetchData();
   }
 
   componentDidUpdate() {
     const { isLoaded } = this.state;
 
     if (!isLoaded) {
-      this.fechData();
+      this.fetchData();
     }
   }
 
@@ -89,7 +89,7 @@ class Board extends React.Component {
     this.setState(DEFAULT_STATE);
   }
 
-  fechData() {
+  fetchData() {
     fetch(URL)
       .then((response) => response.json())
       .then(
