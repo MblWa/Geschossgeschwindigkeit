@@ -1,16 +1,13 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import TestField from './TestField';
 import SideBar from './SideBar';
 import findErrors from './stringUtils';
 import styles from './styles/board.css';
 import utilStyles from './styles/util.css';
 
-const URL = 'https://baconipsum.com/api/?type=all-meat&paras=1';
 const TIME = 100; // In Seconds
-const DEFAULT_STATE = {
-  error: null,
-  isLoaded: false,
-  sampleText: '',
+const DEFAULT_BOARD_STATE = {
   userText: '',
   isStarted: false,
   time: TIME,
@@ -23,27 +20,16 @@ const DEFAULT_STATE = {
 class Board extends React.Component {
   constructor(props) {
     super(props);
-    this.state = DEFAULT_STATE;
+    this.state = DEFAULT_BOARD_STATE;
 
     this.handleUserInput = this.handleUserInput.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.restart = this.restart.bind(this);
   }
 
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  componentDidUpdate() {
-    const { isLoaded } = this.state;
-
-    if (!isLoaded) {
-      this.fetchData();
-    }
-  }
-
   handleUserInput(input) {
-    const { isStarted, sampleText, time } = this.state;
+    const { isStarted, time } = this.state;
+    const { sampleText } = this.props;
     const inputLength = input.length;
     const errorIndexes = findErrors(sampleText, input);
     const errorCount = errorIndexes.length;
@@ -85,35 +71,15 @@ class Board extends React.Component {
 
   restart() {
     const { timerID } = this.state;
+    const { resetLoadedText } = this.props;
 
     clearInterval(timerID);
-    this.setState(DEFAULT_STATE);
-  }
-
-  fetchData() {
-    fetch(URL)
-      .then((response) => response.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            sampleText: result[0].replace(/ {2,}/g, ' '), // Ответ от сервера приходит с двойными пробелами, убираем их.
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error,
-          });
-        },
-      );
+    resetLoadedText();
+    this.setState(DEFAULT_BOARD_STATE);
   }
 
   render() {
     const {
-      isLoaded,
-      sampleText,
-      error,
       userText,
       speed,
       time,
@@ -121,6 +87,11 @@ class Board extends React.Component {
       isStarted,
       errorIndexes,
     } = this.state;
+    const {
+      isLoaded,
+      sampleText,
+      error,
+    } = this.props;
     const errorCount = errorIndexes.length;
     const inputLength = userText.length;
     let accuracy = Math.trunc(((inputLength - errorCount) / inputLength) * 100);
@@ -158,5 +129,16 @@ class Board extends React.Component {
     );
   }
 }
+
+Board.propTypes = {
+  resetLoadedText: PropTypes.func.isRequired,
+  isLoaded: PropTypes.bool.isRequired,
+  sampleText: PropTypes.string.isRequired,
+  error: PropTypes.objectOf(PropTypes.any),
+};
+
+Board.defaultProps = {
+  error: null,
+};
 
 export default Board;
