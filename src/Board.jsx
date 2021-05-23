@@ -64,8 +64,6 @@ class Board extends React.Component {
   }
 
   startTimer() {
-    this.setState({ isStarted: true });
-
     const timer = setInterval(() => {
       const { time, isFinished } = this.state;
 
@@ -79,7 +77,10 @@ class Board extends React.Component {
       }
     }, 1000);
 
-    this.setState({ timerID: timer });
+    this.setState({
+      isStarted: true,
+      timerID: timer,
+    });
   }
 
   restart() {
