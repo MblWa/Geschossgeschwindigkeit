@@ -20,7 +20,7 @@ const SideBar = ({
     />
     <ResultCard
       cardName="Accuracy"
-      cardValue={accuracy}
+      cardValue={Number.isNaN(accuracy) ? 100 : accuracy}
       additionalText=" %"
     />
     <ResultCard

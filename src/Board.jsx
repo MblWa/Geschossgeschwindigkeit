@@ -1,7 +1,7 @@
 import * as React from 'react';
 import TestField from './TestField';
 import SideBar from './SideBar';
-import { findErrors } from './stringUtils';
+import findErrors from './stringUtils';
 import styles from './styles/board.css';
 import utilStyles from './styles/util.css';
 
