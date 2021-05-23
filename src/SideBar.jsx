@@ -8,7 +8,7 @@ const SideBar = ({
   speed,
   accuracy,
   time,
-  triggerStartAgain,
+  restart,
   errorCount,
 }) => (
   <div className={styles.sidebar}>
@@ -36,7 +36,7 @@ const SideBar = ({
     <button
       type="submit"
       className={styles.sidebar__acceptButton}
-      onClick={() => triggerStartAgain()}
+      onClick={() => restart()}
     >
       Start new try
     </button>
@@ -47,7 +47,7 @@ SideBar.propTypes = {
   speed: PropTypes.number.isRequired,
   accuracy: PropTypes.number.isRequired,
   time: PropTypes.number.isRequired,
-  triggerStartAgain: PropTypes.func.isRequired,
+  restart: PropTypes.func.isRequired,
   errorCount: PropTypes.number.isRequired,
 };
 

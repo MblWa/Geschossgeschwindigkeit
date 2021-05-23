@@ -29,7 +29,7 @@ class Board extends React.Component {
 
     this.handleUserInput = this.handleUserInput.bind(this);
     this.startTimer = this.startTimer.bind(this);
-    this.triggerStartAgain = this.triggerStartAgain.bind(this);
+    this.restart = this.restart.bind(this);
   }
 
   componentDidMount() {
@@ -82,7 +82,7 @@ class Board extends React.Component {
     this.setState({ timerID: timer });
   }
 
-  triggerStartAgain() {
+  restart() {
     const { timerID } = this.state;
 
     clearInterval(timerID);
@@ -148,7 +148,7 @@ class Board extends React.Component {
           accuracy={accuracy}
           time={time}
           errorCount={errorCount}
-          triggerStartAgain={this.triggerStartAgain}
+          restart={this.restart}
         />
       </main>
     );
