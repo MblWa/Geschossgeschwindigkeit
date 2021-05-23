@@ -6,7 +6,7 @@ import styles from './styles/board.css';
 import utilStyles from './styles/util.css';
 
 const URL = 'https://baconipsum.com/api/?type=all-meat&paras=1';
-const TIME = 100;
+const TIME = 100; // In Seconds
 const DEFAULT_STATE = {
   error: null,
   isLoaded: false,
@@ -61,6 +61,8 @@ class Board extends React.Component {
   }
 
   startTimer() {
+    // Approximate value of every tick is 1 sec.
+    // If more accuracy needed, should be rewritten with usage of Date.now().
     const timer = setInterval(() => {
       const { time, isFinished } = this.state;
 
