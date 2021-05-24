@@ -6,7 +6,9 @@ import findErrors from './stringUtils';
 import styles from './styles/board.css';
 import utilStyles from './styles/util.css';
 
-const GAME_ROUND_TIME_LIMIT = 100; // In Seconds
+const GAME_ROUND_TIME_LIMIT = 5; // In Seconds
+const TIMER_STEP = 1000; // In Miliseconds
+const TIMER_LOOP_INTERVAL = 100; // In Miliseconds
 const DEFAULT_BOARD_STATE = {
   userText: '',
   isStarted: false,
@@ -44,17 +46,20 @@ class Board extends React.Component {
   }
 
   startTimer() {
-    // Approximate value of every tick is 1 sec.
-    // If more accuracy needed, should be rewritten with usage of Date.now().
+    let startingTime = Date.now();
+
     const timer = setInterval(() => {
       const { time, isFinished } = this.state;
+      const timeDifference = Math.floor((Date.now() - startingTime) / TIMER_STEP);
 
-      if (time > 0 && !isFinished) {
-        this.setState((state) => ({ time: state.time - 1 }));
-      } else {
+      if (timeDifference >= 1 && !isFinished) {
+        startingTime += TIMER_STEP;
+        this.setState((state) => ({ time: state.time - timeDifference }));
+      }
+      if (time <= 0) {
         clearInterval(timer);
       }
-    }, 1000);
+    }, TIMER_LOOP_INTERVAL);
 
     this.setState({
       isStarted: true,
