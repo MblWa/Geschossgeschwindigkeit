@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import Char from './Char';
+import Chunk from './Chunk';
 import styles from './styles/sampletext.css';
 import utilStyles from './styles/util.css';
 
@@ -34,22 +34,33 @@ const SampleText = ({
     <>
       <h2 className={utilStyles.visuallyHidden}>Main text for your training</h2>
       <p className={styles.sampletext}>
-        {[...sampleText].slice(0, lastChar).map((char, i) => (
-          <Char
-            key={i.toString() + char}
-            isStarted={isStarted}
-            char={char}
-            state={errorIndex === i ? 'error' : 'success'}
-          />
-        ))}
-        {[...sampleText].slice(lastChar, sampleText.length).map((char, i) => (
-          <Char
-            key={i.toString() + char}
-            isStarted={isStarted}
-            char={char}
-            state="default"
-          />
-        ))}
+        {errorIndex === null
+          ? (
+            <Chunk
+              isStarted={isStarted}
+              char={sampleText.slice(0, lastChar)}
+              state="success"
+            />
+          )
+          : (
+            <>
+              <Chunk
+                isStarted={isStarted}
+                char={sampleText.slice(0, lastChar - 1)}
+                state="success"
+              />
+              <Chunk
+                isStarted={isStarted}
+                char={sampleText.slice(lastChar - 1, lastChar)}
+                state="error"
+              />
+            </>
+          )}
+        <Chunk
+          isStarted={isStarted}
+          char={sampleText.slice(lastChar, sampleText.length)}
+          state="default"
+        />
       </p>
     </>
   );
