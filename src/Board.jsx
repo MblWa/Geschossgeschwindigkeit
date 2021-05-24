@@ -12,7 +12,6 @@ const DEFAULT_BOARD_STATE = {
   isStarted: false,
   time: GAME_ROUND_TIME_LIMIT,
   timerID: null,
-  speed: 0,
   errorIndexes: [],
   isFinished: false,
 };
@@ -28,16 +27,14 @@ class Board extends React.Component {
   }
 
   handleUserInput(input) {
-    const { isStarted, time } = this.state;
+    const { isStarted } = this.state;
     const { sampleText } = this.props;
     const inputLength = input.length;
     const errorIndexes = findErrors(sampleText, input);
-    const errorCount = errorIndexes.length;
 
     this.setState({
       userText: input,
       errorIndexes,
-      speed: Math.trunc(((inputLength - errorCount) / (GAME_ROUND_TIME_LIMIT - time + 1)) * 60),
       isFinished: inputLength >= sampleText.length,
     });
 
@@ -53,11 +50,7 @@ class Board extends React.Component {
       const { time, isFinished } = this.state;
 
       if (time > 0 && !isFinished) {
-        this.setState((state) => ({
-          time: state.time - 1,
-          speed: Math.trunc(((
-            state.userText.length - state.errorIndexes.length) / (GAME_ROUND_TIME_LIMIT - time + 1)) * 60),
-        }));
+        this.setState((state) => ({ time: state.time - 1 }));
       } else {
         clearInterval(timer);
       }
@@ -81,7 +74,6 @@ class Board extends React.Component {
   render() {
     const {
       userText,
-      speed,
       time,
       isFinished,
       isStarted,
@@ -92,11 +84,14 @@ class Board extends React.Component {
       sampleText,
       error,
     } = this.props;
+
     const errorCount = errorIndexes.length;
     const inputLength = userText.length;
     const accuracy = (inputLength === 0)
       ? 100
       : Math.trunc(((inputLength - errorCount) / inputLength) * 100);
+    const speed = Math.trunc(((inputLength - errorCount)
+                  / (GAME_ROUND_TIME_LIMIT - time + 1)) * 60);
 
     return (
       <main className={styles.board}>
