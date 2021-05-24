@@ -1,17 +1,17 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import styles from './styles/char.css';
+import styles from './styles/chunk.css';
 
-const Chunk = ({ char, isStarted, state }) => {
+const Chunk = ({ chunk, isStarted, state }) => {
   if (!isStarted || state === 'default') {
-    return <span className={styles.default}>{char}</span>;
+    return <span className={styles.default}>{chunk}</span>;
   }
 
-  return <span className={state === 'error' ? styles.error : styles.success}>{char}</span>;
+  return <span className={state === 'error' ? styles.error : styles.success}>{chunk}</span>;
 };
 
 Chunk.propTypes = {
-  char: PropTypes.string.isRequired,
+  chunk: PropTypes.string.isRequired,
   state: PropTypes.string.isRequired,
   isStarted: PropTypes.bool.isRequired,
 };

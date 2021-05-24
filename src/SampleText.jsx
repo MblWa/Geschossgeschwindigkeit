@@ -38,7 +38,7 @@ const SampleText = ({
           ? (
             <Chunk
               isStarted={isStarted}
-              char={sampleText.slice(0, lastChar)}
+              chunk={sampleText.slice(0, lastChar)}
               state="success"
             />
           )
@@ -46,19 +46,19 @@ const SampleText = ({
             <>
               <Chunk
                 isStarted={isStarted}
-                char={sampleText.slice(0, lastChar - 1)}
+                chunk={sampleText.slice(0, lastChar - 1)}
                 state="success"
               />
               <Chunk
                 isStarted={isStarted}
-                char={sampleText.slice(lastChar - 1, lastChar)}
+                chunk={sampleText.slice(lastChar - 1, lastChar)}
                 state="error"
               />
             </>
           )}
         <Chunk
           isStarted={isStarted}
-          char={sampleText.slice(lastChar, sampleText.length)}
+          chunk={sampleText.slice(lastChar, sampleText.length)}
           state="default"
         />
       </p>
