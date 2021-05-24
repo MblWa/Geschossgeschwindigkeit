@@ -6,11 +6,11 @@ import findErrors from './stringUtils';
 import styles from './styles/board.css';
 import utilStyles from './styles/util.css';
 
-const TIME = 100; // In Seconds
+const GAME_ROUND_TIME_LIMIT = 100; // In Seconds
 const DEFAULT_BOARD_STATE = {
   userText: '',
   isStarted: false,
-  time: TIME,
+  time: GAME_ROUND_TIME_LIMIT,
   timerID: null,
   speed: 0,
   errorIndexes: [],
@@ -37,7 +37,7 @@ class Board extends React.Component {
     this.setState({
       userText: input,
       errorIndexes,
-      speed: Math.trunc(((inputLength - errorCount) / (TIME - time + 1)) * 60),
+      speed: Math.trunc(((inputLength - errorCount) / (GAME_ROUND_TIME_LIMIT - time + 1)) * 60),
       isFinished: inputLength >= sampleText.length,
     });
 
@@ -56,7 +56,7 @@ class Board extends React.Component {
         this.setState((state) => ({
           time: state.time - 1,
           speed: Math.trunc(((
-            state.userText.length - state.errorIndexes.length) / (TIME - time + 1)) * 60),
+            state.userText.length - state.errorIndexes.length) / (GAME_ROUND_TIME_LIMIT - time + 1)) * 60),
         }));
       } else {
         clearInterval(timer);
