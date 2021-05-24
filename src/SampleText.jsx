@@ -9,7 +9,7 @@ const SampleText = ({
   sampleText,
   error,
   isStarted,
-  errorIndexes,
+  errorIndex,
   lastChar,
 }) => {
   if (error) {
@@ -39,7 +39,7 @@ const SampleText = ({
             key={i.toString() + char}
             isStarted={isStarted}
             char={char}
-            state={errorIndexes.includes(i) ? 'error' : 'success'}
+            state={errorIndex === i ? 'error' : 'success'}
           />
         ))}
         {[...sampleText].slice(lastChar, sampleText.length).map((char, i) => (
@@ -60,12 +60,12 @@ SampleText.propTypes = {
   sampleText: PropTypes.string.isRequired,
   error: PropTypes.objectOf(PropTypes.any),
   isStarted: PropTypes.bool.isRequired,
-  errorIndexes: PropTypes.arrayOf(PropTypes.number),
+  errorIndex: PropTypes.number,
   lastChar: PropTypes.number,
 };
 
 SampleText.defaultProps = {
-  errorIndexes: [],
+  errorIndex: null,
   error: null,
   lastChar: 0,
 };

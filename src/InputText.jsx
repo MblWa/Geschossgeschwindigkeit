@@ -15,6 +15,7 @@ const InputText = ({
     value={userText}
     disabled={(isLoaded && !error) ? '' : 'disabled'}
     onChange={(evt) => handleUserInput(evt.target.value)}
+    onPaste={(evt) => evt.preventDefault()}
   />
 );
 

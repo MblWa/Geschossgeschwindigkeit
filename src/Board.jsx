@@ -2,18 +2,19 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import TestField from './TestField';
 import SideBar from './SideBar';
-import findErrors from './stringUtils';
 import styles from './styles/board.css';
 import utilStyles from './styles/util.css';
 
-const TIME = 100; // In Seconds
+const GAME_ROUND_TIME_LIMIT = 60; // In Seconds
+const TIMER_STEP = 1000; // In Miliseconds
+const TIMER_LOOP_INTERVAL = 100; // In Miliseconds
 const DEFAULT_BOARD_STATE = {
   userText: '',
   isStarted: false,
-  time: TIME,
+  time: GAME_ROUND_TIME_LIMIT,
   timerID: null,
-  speed: 0,
-  errorIndexes: [],
+  errorIndex: null,
+  errorCount: 0,
   isFinished: false,
 };
 
@@ -28,40 +29,51 @@ class Board extends React.Component {
   }
 
   handleUserInput(input) {
-    const { isStarted, time } = this.state;
+    const { isStarted, errorIndex, userText } = this.state;
     const { sampleText } = this.props;
     const inputLength = input.length;
-    const errorIndexes = findErrors(sampleText, input);
-    const errorCount = errorIndexes.length;
 
-    this.setState({
-      userText: input,
-      errorIndexes,
-      speed: Math.trunc(((inputLength - errorCount) / (TIME - time + 1)) * 60),
-      isFinished: inputLength >= sampleText.length,
-    });
+    if (inputLength >= userText.length) { // Doesn't allow to delete text
+      if ((sampleText[inputLength - 1] !== input[inputLength - 1])) { // Validates last char
+        if (errorIndex !== inputLength - 1) { // If not the same mistake
+          this.setState((state) => ({
+            errorCount: state.errorCount + 1,
+            errorIndex: inputLength - 1,
+            userText: input.slice(0, -1),
+          }));
+        }
+      } else {
+        this.setState({
+          errorIndex: null,
+          userText: input,
+          isFinished: inputLength === sampleText.length,
+        });
+      }
 
-    if (!isStarted) {
-      this.startTimer();
+      if (!isStarted) {
+        this.startTimer();
+      }
     }
   }
 
   startTimer() {
-    // Approximate value of every tick is 1 sec.
-    // If more accuracy needed, should be rewritten with usage of Date.now().
+    let startingTime = Date.now();
+
     const timer = setInterval(() => {
       const { time, isFinished } = this.state;
+      const timeDifference = Math.floor((Date.now() - startingTime) / TIMER_STEP);
 
-      if (time > 0 && !isFinished) {
+      if (timeDifference >= 1 && !isFinished && time > 0) {
+        startingTime += TIMER_STEP;
         this.setState((state) => ({
-          time: state.time - 1,
-          speed: Math.trunc(((
-            state.userText.length - state.errorIndexes.length) / (TIME - time + 1)) * 60),
+          time: (state.time - timeDifference >= 0) ? state.time - timeDifference : 0,
         }));
-      } else {
+      }
+
+      if (time <= 0) {
         clearInterval(timer);
       }
-    }, 1000);
+    }, TIMER_LOOP_INTERVAL);
 
     this.setState({
       isStarted: true,
@@ -81,24 +93,25 @@ class Board extends React.Component {
   render() {
     const {
       userText,
-      speed,
       time,
       isFinished,
       isStarted,
-      errorIndexes,
+      errorIndex,
+      errorCount,
     } = this.state;
     const {
       isLoaded,
       sampleText,
       error,
     } = this.props;
-    const errorCount = errorIndexes.length;
-    const inputLength = userText.length;
-    let accuracy = Math.trunc(((inputLength - errorCount) / inputLength) * 100);
 
-    if (Number.isNaN(accuracy)) {
-      accuracy = 100;
-    }
+    const inputLength = userText.length;
+    const accuracy = (inputLength === 0)
+      ? 0
+      : Math.round(((inputLength - errorCount) / inputLength) * 100);
+    const speed = (time === GAME_ROUND_TIME_LIMIT)
+      ? Math.round((inputLength / (GAME_ROUND_TIME_LIMIT - time + 1)) * 60)
+      : Math.round((inputLength / (GAME_ROUND_TIME_LIMIT - time)) * 60);
 
     return (
       <main className={styles.board}>
@@ -113,7 +126,7 @@ class Board extends React.Component {
               error={error}
               userText={userText}
               isStarted={isStarted}
-              errorIndexes={errorIndexes}
+              errorIndex={errorIndex}
               handleUserInput={this.handleUserInput}
             />
           )

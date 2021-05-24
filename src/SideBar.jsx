@@ -24,7 +24,7 @@ const SideBar = ({
       additionalText=" %"
     />
     <ResultCard
-      cardName="Errors"
+      cardName="Typos"
       cardValue={errorCount}
       additionalText=""
     />
@@ -38,7 +38,7 @@ const SideBar = ({
       className={styles.sidebar__acceptButton}
       onClick={() => restart()}
     >
-      Start new try
+      Restart
     </button>
   </div>
 );

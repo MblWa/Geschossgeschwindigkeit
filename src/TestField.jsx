@@ -11,7 +11,7 @@ const TestField = ({
   userText,
   handleUserInput,
   isStarted,
-  errorIndexes,
+  errorIndex,
 }) => (
   <div className={styles.testfield}>
     <SampleText
@@ -19,8 +19,8 @@ const TestField = ({
       sampleText={sampleText}
       error={error}
       isStarted={isStarted}
-      errorIndexes={errorIndexes}
-      lastChar={userText.length}
+      errorIndex={errorIndex}
+      lastChar={errorIndex === null ? userText.length : userText.length + 1}
     />
     <InputText
       userText={userText}
@@ -38,12 +38,12 @@ TestField.propTypes = {
   userText: PropTypes.string,
   handleUserInput: PropTypes.func.isRequired,
   isStarted: PropTypes.bool.isRequired,
-  errorIndexes: PropTypes.arrayOf(PropTypes.number),
+  errorIndex: PropTypes.number,
 };
 
 TestField.defaultProps = {
   userText: '',
-  errorIndexes: [],
+  errorIndex: null,
   error: null,
 };
 
