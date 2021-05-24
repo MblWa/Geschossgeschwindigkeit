@@ -24,7 +24,7 @@ const SideBar = ({
       additionalText=" %"
     />
     <ResultCard
-      cardName="Errors"
+      cardName="Typos"
       cardValue={errorCount}
       additionalText=""
     />
