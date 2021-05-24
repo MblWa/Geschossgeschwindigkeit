@@ -94,11 +94,9 @@ class Board extends React.Component {
     } = this.props;
     const errorCount = errorIndexes.length;
     const inputLength = userText.length;
-    let accuracy = Math.trunc(((inputLength - errorCount) / inputLength) * 100);
-
-    if (Number.isNaN(accuracy)) {
-      accuracy = 100;
-    }
+    const accuracy = (inputLength === 0)
+      ? 100
+      : Math.trunc(((inputLength - errorCount) / inputLength) * 100);
 
     return (
       <main className={styles.board}>
