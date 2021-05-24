@@ -106,7 +106,7 @@ class Board extends React.Component {
     } = this.props;
 
     const inputLength = userText.length;
-    const accuracy = (inputLength === 0)
+    const accuracy = (inputLength === 0 || inputLength - errorCount < 0)
       ? 0
       : Math.round(((inputLength - errorCount) / inputLength) * 100);
     const speed = (time === GAME_ROUND_TIME_LIMIT)
