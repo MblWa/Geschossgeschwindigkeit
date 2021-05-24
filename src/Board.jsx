@@ -6,7 +6,7 @@ import findErrors from './stringUtils';
 import styles from './styles/board.css';
 import utilStyles from './styles/util.css';
 
-const GAME_ROUND_TIME_LIMIT = 20; // In Seconds
+const GAME_ROUND_TIME_LIMIT = 60; // In Seconds
 const TIMER_STEP = 1000; // In Miliseconds
 const TIMER_LOOP_INTERVAL = 100; // In Miliseconds
 const DEFAULT_BOARD_STATE = {
@@ -54,7 +54,9 @@ class Board extends React.Component {
 
       if (timeDifference >= 1 && !isFinished && time > 0) {
         startingTime += TIMER_STEP;
-        this.setState((state) => ({ time: state.time - timeDifference }));
+        this.setState((state) => ({
+          time: (state.time - timeDifference >= 0) ? state.time - timeDifference : 0,
+        }));
       }
 
       if (time <= 0) {
