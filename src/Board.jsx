@@ -9,7 +9,7 @@ const GAME_ROUND_TIME_LIMIT = 60; // In Seconds
 const TIMER_STEP = 1000; // In Miliseconds
 const TIMER_LOOP_INTERVAL = 100; // In Miliseconds
 const DEFAULT_BOARD_STATE = {
-  userText: '',
+  userTextIndex: 0,
   isStarted: false,
   time: GAME_ROUND_TIME_LIMIT,
   timerID: null,
@@ -22,37 +22,47 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = DEFAULT_BOARD_STATE;
+    this.autofocusTimerId = null;
 
-    this.handleUserInput = this.handleUserInput.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.restart = this.restart.bind(this);
+    this.focusedElement = React.createRef();
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
-  handleUserInput(input) {
-    const { isStarted, errorIndex, userText } = this.state;
-    const { sampleText } = this.props;
-    const inputLength = input.length;
+  componentDidMount() {
+    this.autofocusTimerId = setInterval(() => {
+      const { time, isFinished } = this.state;
 
-    if (inputLength >= userText.length) { // Doesn't allow to delete text
-      if ((sampleText[inputLength - 1] !== input[inputLength - 1])) { // Validates last char
-        if (errorIndex !== inputLength - 1) { // If not the same mistake
-          this.setState((state) => ({
-            errorCount: state.errorCount + 1,
-            errorIndex: inputLength - 1,
-            userText: input.slice(0, -1),
-          }));
-        }
+      if (!isFinished && time > 0) {
+        this.focusedElement.current.focus();
       } else {
-        this.setState({
-          errorIndex: null,
-          userText: input,
-          isFinished: inputLength === sampleText.length,
-        });
+        clearInterval(this.autofocusTimerId);
       }
+    }, TIMER_LOOP_INTERVAL);
+  }
 
-      if (!isStarted) {
-        this.startTimer();
+  handleKeyPress(input) {
+    const { isStarted, errorIndex, userTextIndex } = this.state;
+    const { sampleText } = this.props;
+
+    if (sampleText[userTextIndex] !== input) { // Validates last char
+      if (errorIndex !== userTextIndex) { // If not the same mistake
+        this.setState((state) => ({
+          errorCount: state.errorCount + 1,
+          errorIndex: userTextIndex,
+        }));
       }
+    } else {
+      this.setState((state) => ({
+        errorIndex: null,
+        userTextIndex: state.userTextIndex + 1,
+        isFinished: userTextIndex === sampleText.length - 1,
+      }));
+    }
+
+    if (!isStarted) {
+      this.startTimer();
     }
   }
 
@@ -92,7 +102,7 @@ class Board extends React.Component {
 
   render() {
     const {
-      userText,
+      userTextIndex,
       time,
       isFinished,
       isStarted,
@@ -105,16 +115,21 @@ class Board extends React.Component {
       error,
     } = this.props;
 
-    const inputLength = userText.length;
-    const accuracy = (inputLength === 0 || inputLength - errorCount < 0)
+    const accuracy = (userTextIndex === 0 || userTextIndex - errorCount < 0)
       ? 0
-      : Math.round(((inputLength - errorCount) / inputLength) * 100);
+      : Math.round(((userTextIndex - errorCount) / userTextIndex) * 100);
     const speed = (time === GAME_ROUND_TIME_LIMIT)
-      ? Math.round((inputLength / (GAME_ROUND_TIME_LIMIT - time + 1)) * 60)
-      : Math.round((inputLength / (GAME_ROUND_TIME_LIMIT - time)) * 60);
+      ? Math.round((userTextIndex / (GAME_ROUND_TIME_LIMIT - time + 1)) * 60)
+      : Math.round((userTextIndex / (GAME_ROUND_TIME_LIMIT - time)) * 60);
 
     return (
-      <main className={styles.board}>
+      <div
+        className={styles.board}
+        tabIndex={0}
+        onKeyPress={(evt) => this.handleKeyPress(evt.key)}
+        ref={this.focusedElement}
+        role="textbox"
+      >
         <h1 className={utilStyles.visuallyHidden}>
           Geschossgeschwindigkeit - is the best way to learn typing fast
         </h1>
@@ -124,13 +139,12 @@ class Board extends React.Component {
               isLoaded={isLoaded}
               sampleText={sampleText}
               error={error}
-              userText={userText}
+              userTextIndex={userTextIndex}
               isStarted={isStarted}
               errorIndex={errorIndex}
-              handleUserInput={this.handleUserInput}
             />
           )
-          : <div className={styles.board__gameover}>Finish!</div>}
+          : <div className={styles.board__gameover}>das Finish!</div>}
         <SideBar
           speed={speed}
           accuracy={accuracy}
@@ -138,7 +152,7 @@ class Board extends React.Component {
           errorCount={errorCount}
           restart={this.restart}
         />
-      </main>
+      </div>
     );
   }
 }

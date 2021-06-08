@@ -15,7 +15,7 @@ const SampleText = ({
   if (error) {
     return (
       <p className={utilStyles.error}>
-        Ошибка:
+        Error:
         {' '}
         {error.message}
       </p>
@@ -25,7 +25,7 @@ const SampleText = ({
   if (!isLoaded) {
     return (
       <p className={styles.sampletext}>
-        Загрузка...
+        Loading...
       </p>
     );
   }
